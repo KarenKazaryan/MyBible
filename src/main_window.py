@@ -1,5 +1,5 @@
 import flet as ft
-from book_list import books
+from src.book_list import books
 
 
 def main(page: ft.Page):
@@ -18,14 +18,14 @@ def main(page: ft.Page):
         page.update()
 
 
-    def navigate(e):
-        index = page.navigation_bar.selected_index
-        page.clean()
-
-        if index==0: page.add()
-        elif index==1: page.add()
-        elif index == 2: page.add()
-        elif index == 3: page.add()
+    # def navigate(e):
+    #     index = page.navigation_bar.selected_index
+    #     page.clean()
+    #
+    #     if index==0: page.add()
+    #     elif index==1: page.add()
+    #     elif index == 2: page.add()
+    #     elif index == 3: page.add()
 
     page.add(
         ft.Row([
@@ -47,7 +47,8 @@ def main(page: ft.Page):
                 label="Закладки",
             ),
             ft.NavigationBarDestination(icon=ft.Icons.SETTINGS, label="Настройки"),
-        ], on_change=navigate()
+        ]
+        # ], on_change=navigate()
     )
 
     for book in books["ru"]: page.add(ft.TextButton(text=book))
