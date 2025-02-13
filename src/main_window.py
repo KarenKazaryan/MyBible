@@ -30,7 +30,6 @@ def main(page: ft.Page):
     page.add(
         ft.Row([
             ft.ElevatedButton('SYNO'),
-            ft.ElevatedButton('Бытие'),
             ft.IconButton(ft.Icons.BRIGHTNESS_6, on_click=change_theme)
         ]
         )
@@ -53,7 +52,7 @@ def main(page: ft.Page):
 
     for book in books["ru"]: page.add(ft.TextButton(text=book))
 
-    text = open('SYNO.txt', mode='r')
+    # text = open('SYNO.txt', mode='r')
 
 
 

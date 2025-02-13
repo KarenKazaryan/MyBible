@@ -1,38 +1,48 @@
-import peewee
+from peewee import *
 
-database = peewee.SqliteDatabase('database.db')
+db = SqliteDatabase('nasb.db')
 
 
-class BaseModel(peewee.Model):
+class BaseModel(Model):
     class Meta:
-        database = database
+        database = db
 
-class ModuleBible(BaseModel):
-    full_name = peewee.TextField()
-    short_name = peewee.CharField()
 
+class Translation(BaseModel):
+    short_name = CharField(unique=True)  # Название перевода
+    full_name = CharField(unique=False, null=True)
 
 class Book(BaseModel):
-    id_module = peewee.ForeignKeyField(ModuleBible, backref='module')
-    name = peewee.CharField(unique=True)
-    author = peewee.CharField()
-    year_writing = peewee.DateField()
-    description = peewee.TextField()
+    book_number = IntegerField(unique=True)  # Номер книги
+    name = CharField()
 
 
 class Chapter(BaseModel):
-    id_book = peewee.ForeignKeyField(Book, backref='book')
+    book = ForeignKeyField(Book, backref='chapters')
+    chapter_number = IntegerField()
+
+    class Meta:
+        indexes = (
+            (('book', 'chapter_number'), True),
+        )
 
 
-class Poew(BaseModel):
-    id_chapter = peewee.ForeignKeyField(Chapter, backref='chapter')
-    id_book = peewee.ForeignKeyField(Book, backref='books')
-    text = peewee.TextField()
+class Verse(BaseModel):
+    chapter = ForeignKeyField(Chapter, backref='verses')
+    verse_number = IntegerField()
+    text = TextField()
+
+    class Meta:
+        indexes = (
+            (('chapter', 'verse_number'), True),
+        )
 
 
-database.create_tables([
-    ModuleBible,
-    Book,
-    Chapter,
-    Poew
-])
+def initialize_db():
+    with db:
+        db.create_tables([Translation, Book, Chapter, Verse])
+
+
+initialize_db()
+print("База данных создана и готова к использованию.")
+
